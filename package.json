@@ -1,0 +1,14 @@
+{
+  "name": "bot_manager",
+  "version": "0.0.0",
+  "description": "A service for monitoring when we need to reload our running containers.",
+  "main": "index.js",
+  "author": "Johnny Hausman",
+  "license": "MIT",
+  "dependencies": {
+    "ab-utils": "Hiro-Nakamura/ab-utils",
+    "express": "^4.16.4",
+    "shelljs": "^0.8.3",
+    "slackbots": "^1.2.0"
+  }
+}
