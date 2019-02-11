@@ -48,5 +48,27 @@ module.exports = {
   /*************************************************************************/
   commands: {
     update: "docker stack deploy -c docker-compose.yml ab"
+  },
+  /*************************************************************************/
+  /* hostConnection                                                        */
+  /* define how the communication between this container and the host      */
+  /* command processor.                                                    */
+  /* If a sharedSock is defined, that will be chosen over the .tcp option. */
+  /* NOTE: using sharedSock on a Mac system will result in "ECONNREFUSED"  */
+  /* sharedSock:    On Linux systems we can share a .sock to communicate   */
+  /*  path :        {string} full path to the shared socket                */
+  /* tcp:           On non Linux systems, we will create a tcp connection  */
+  /*  port:         {string} the port to connect to on the host            */
+  /*  accessToken:  {string} a shared accessToken this client must provide */
+  /*                to establish the connection.                           */
+  /*************************************************************************/
+  hostConnection: {
+    // sharedSock: {
+    //   path: "/tmp/appbuilder.sock"
+    // },
+    // tcp: {
+    //   port: "1338",
+    //   accessToken: "li77lePigLi77lePigLe7MeIn"
+    // }
   }
 };
