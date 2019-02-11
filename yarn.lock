@@ -4,7 +4,7 @@
 
 ab-utils@Hiro-Nakamura/ab-utils:
   version "0.0.0"
-  resolved "https://codeload.github.com/Hiro-Nakamura/ab-utils/tar.gz/d4b3463e3f913f7add72da4909c30dd4e767d14e"
+  resolved "https://codeload.github.com/Hiro-Nakamura/ab-utils/tar.gz/da30586df5f44bcd3b9d61199ab0e4341dece1b7"
   dependencies:
     lodash "^4.17.11"
 

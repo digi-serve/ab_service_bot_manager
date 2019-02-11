@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const AB = require("ab-utils");
 
 const config = AB.config("bot_manager");
@@ -111,11 +112,15 @@ function connectHost() {
     .on("error", function(data) {
       console.log(data);
       if (data.code == "ECONNREFUSED") {
-        fs.access(SOCKETFILE, fs.constants.F_OK | fs.constants.F_OK, err => {
-          if (err) {
-            console.log("fs.access:", err);
-          }
-        });
+        // if we are supposed to be working with a .sock file,
+        // make sure it is accessible:
+        if (isSockConnection) {
+          fs.access(SOCKETFILE, fs.constants.F_OK | fs.constants.F_OK, err => {
+            if (err) {
+              console.log("fs.access:", err);
+            }
+          });
+        }
       }
       console.error("Server not active.");
       if (config.slackBot.enable) {
