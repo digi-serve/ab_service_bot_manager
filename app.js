@@ -73,6 +73,7 @@ var RECONNECTING = false;
 
 function connectHost() {
   if (isSockConnection) {
+    console.log(`createConnection(${SOCKETFILE})`);
     client = net.createConnection(SOCKETFILE);
   } else {
     console.log(`createConnection(${PORT}, ${HOST})`);
