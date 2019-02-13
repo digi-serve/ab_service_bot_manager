@@ -42,6 +42,7 @@ var SOCKETFILE = "/tmp/ab.sock";
 var HOST = "host.docker.internal";
 var PORT = "1338";
 var ACCESSTOKEN = "ThereIsN0Sp00n";
+var endCounter = 0;
 if (
   !config.hostConnection.sharedSock ||
   !config.hostconnection.sharedSock.path
@@ -74,6 +75,7 @@ function connectHost() {
   if (isSockConnection) {
     client = net.createConnection(SOCKETFILE);
   } else {
+    console.log(`createConnection(${PORT}, ${HOST})`);
     client = net.createConnection(PORT, HOST);
   }
 
@@ -81,7 +83,7 @@ function connectHost() {
     .on("connect", () => {
       console.log("Connected to Host Process");
       if (!isSockConnection) {
-        console.log("... sending accessToken");
+        console.log("... sending accessToken (" + ACCESSTOKEN + ")");
         client.write(ACCESSTOKEN);
       }
       slackBot.setClient(client);
@@ -129,7 +131,8 @@ function connectHost() {
       reconnectToHost();
     })
     .on("end", function() {
-      console.log("Connection to Host received: 'end'. ");
+      endCounter += 1;
+      console.log(`${endCounter}: Connection to Host received: 'end'. `);
       reconnectToHost();
     });
 }
@@ -142,7 +145,7 @@ function reconnectToHost() {
       RECONNECTING = false;
       console.log("... attempt to reconnect to host");
       connectHost();
-    }, 5000);
+    }, 10000);
   }
 }
 
