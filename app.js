@@ -45,7 +45,7 @@ var ACCESSTOKEN = "ThereIsN0Sp00n";
 var endCounter = 0;
 if (
   !config.hostConnection.sharedSock ||
-  !config.hostconnection.sharedSock.path
+  !config.hostConnection.sharedSock.path
 ) {
   isSockConnection = false;
   if (
@@ -60,7 +60,7 @@ if (
   }
 }
 if (isSockConnection) {
-  SOCKETFILE = config.hostconnection.sharedSock.path;
+  SOCKETFILE = config.hostConnection.sharedSock.path;
 } else {
   HOST = config.hostConnection.tcp.host || HOST;
   PORT = config.hostConnection.tcp.port;
@@ -84,7 +84,7 @@ function connectHost() {
     .on("connect", () => {
       console.log("Connected to Host Process");
       if (!isSockConnection) {
-        console.log("... sending accessToken (" + ACCESSTOKEN + ")");
+        console.log("... sending accessToken");
         client.write(ACCESSTOKEN);
       }
       slackBot.setClient(client);
@@ -140,6 +140,7 @@ function connectHost() {
 
 function reconnectToHost() {
   client.end();
+  client = null;
   if (!RECONNECTING) {
     RECONNECTING = true;
     setTimeout(() => {
