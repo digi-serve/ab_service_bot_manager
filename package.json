@@ -8,7 +8,12 @@
   "dependencies": {
     "ab-utils": "Hiro-Nakamura/ab-utils",
     "express": "^4.16.4",
+    "nodemon": "^1.18.10",
     "shelljs": "^0.8.3",
     "slackbots": "^1.2.0"
+  },
+  "scripts": {
+    "dev": "node_modules/.bin/nodemon --inspect=0.0.0.0:9229 app.js",
+    "devInstall": "docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node bash"
   }
 }
