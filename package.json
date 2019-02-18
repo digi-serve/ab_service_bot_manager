@@ -14,6 +14,7 @@
   },
   "scripts": {
     "dev": "node_modules/.bin/nodemon --inspect=0.0.0.0:9229 app.js",
+    "devBuild": "rm node_modules/.yarn-integrity && docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node yarn",
     "devInstall": "docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node bash"
   }
 }
