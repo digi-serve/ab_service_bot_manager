@@ -14,9 +14,14 @@
   },
   "scripts": {
     "dev": "node_modules/.bin/nodemon --inspect=0.0.0.0:9229 app.js",
-    "devBuild": "rm node_modules/.yarn-integrity && docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node yarn",
-    "devInstall": "docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node bash",
-    "devWinBuild": "docker run -it --mount type=bind,source=%cd%,target=/app -w /app node yarn",
-    "devWinInstall": "docker run -it --mount type=bind,source=%cd%,target=/app -w /app node bash"
+    "devBuild": "run-script-os",
+    "devInstall": "run-script-os",
+    "devBuild:darwin:linux": "rm node_modules/.yarn-integrity && docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node yarn",
+    "devInstall:darwin:linux": "docker run -it --mount type=bind,source=\"$(pwd)\",target=/app -w /app node bash",
+    "devBuild:win32": "rm node_modules/.yarn-integrity&& docker run -it --mount type=bind,source=%cd%,target=/app -w /app node yarn",
+    "devInstall:win32": "docker run -it --mount type=bind,source=%cd%,target=/app -w /app node bash"
+  },
+  "devDependencies": {
+    "run-script-os": "^1.0.5"
   }
 }
