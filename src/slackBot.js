@@ -5,12 +5,14 @@
 const path = require("path");
 const SlackBot = require("slackbots");
 const update = require(path.join(__dirname, "command_update.js"));
+const processcheck = require(path.join(__dirname, "command_processcheck.js"));
 
 // commands
 // a hash of commands we can process:
 // update : issue a command to update the Docker Containers
 const Commands = {
-  update
+  update,
+  processcheck
 };
 
 var bot;
@@ -54,7 +56,7 @@ module.exports = {
       name: config.slackBot.botName
     });
 
-    bot.on("start", function() {
+    bot.on("start", function () {
       // get the channelID of the desired channel to interact with
       bot.getChannelId(config.slackBot.channel).then(id => {
         channelID = id;
@@ -78,7 +80,7 @@ module.exports = {
       bot.postMessageToChannel(config.slackBot.channel, `online!`);
     });
 
-    bot.on("message", function(data) {
+    bot.on("message", function (data) {
       // all ingoing events https://api.slack.com/rtm
       // console.log('message:', data);
       if (data.type == "message") {
