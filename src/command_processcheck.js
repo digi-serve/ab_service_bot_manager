@@ -9,7 +9,7 @@
 const psLookup = require("current-processes");
 const _ = require("lodash");
 
-let isCheckInProgress = false;
+var isUpdateInProgress = false;
 var timeoutID = null;
 
 var Bot;
@@ -22,8 +22,8 @@ module.exports = (bot, config, options, commandServer) => {
   Server = commandServer;
 
   // prevent issuing multiple commands
-  if (!isCheckInProgress) {
-    isCheckInProgress = true;
+  if (!isUpdateInProgress) {
+    isUpdateInProgress = true;
 
     bot.postMessageToChannel(
       config.slackBot.channel,
@@ -80,11 +80,11 @@ var history = []
 var repeatoffenders = [];
 
 function checkProcess() {
-  // This runs over a small span of time in order to avoid capturing spikes
+  // This runs several times over a small span of time in order to avoid capturing spikes
   setTimeout(function () {
     checkRunningProcesses()
     i++;
-    if (i < 5) {
+    if (i < 10) {
       checkProcess();
     }
 
