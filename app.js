@@ -90,7 +90,7 @@ function connectHost() {
       slackBot.setClient(client);
     })
     // Messages are buffers. use toString
-    .on("data", function(data) {
+    .on("data", function (data) {
       data = data.toString();
 
       if (data === "__running") {
@@ -108,11 +108,18 @@ function connectHost() {
           offlineAlert();
         }
       }
+      //__usageAlert: "This process " name(pid), "has been at "cpu%,mem usage reportinMB, "for " ctime,elapsed
+      if (data.indexOf("__alert") > -1) {
+        var body = data.split(":");
+        if (config.slackBot.enable) {
+          slackBot.write(body[1]);
+        }
+      }
 
       // Generic message handler
       // console.info("Server:", data);
     })
-    .on("error", function(data) {
+    .on("error", function (data) {
       console.log(data);
       if (data.code == "ECONNREFUSED") {
         // if we are supposed to be working with a .sock file,
@@ -131,7 +138,7 @@ function connectHost() {
       }
       reconnectToHost();
     })
-    .on("end", function() {
+    .on("end", function () {
       endCounter += 1;
       console.log(`${endCounter}: Connection to Host received: 'end'. `);
       reconnectToHost();
@@ -158,6 +165,7 @@ function reconnectToHost() {
  */
 var offlineImages = [];
 var offlineAlerted = false;
+
 function offlineAlert() {
   if (offlineImages.length > 0) {
     slackBot.write("... offline images:" + offlineImages.join(", "));

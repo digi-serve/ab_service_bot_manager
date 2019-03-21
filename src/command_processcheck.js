@@ -29,20 +29,19 @@ module.exports = (bot, config, options, commandServer) => {
       config.slackBot.channel,
       "... checking server Processes"
     );
-    /* 
-        // pass our update command to the Host Process
-        commandServer.write(config.commands.update);
 
-        // listen for responses from the Host
-        commandServer.on("data", done);
-     */
+    checkRunningProcesses();
+    //Run the loop
     checkProcess();
+
+    //return results
     logHighUsageProcesses();
+
     // reset our Timer
     clearTimeout(timeoutID);
     timeoutID = setTimeout(() => {
       isUpdateInProgress = false;
-    }, 3 * 60 * 1000); // 3min
+    }, 1000); // 3 * 60 *  3min
   }
 };
 
@@ -67,24 +66,21 @@ function done(data) {
   }
 }
 
-/* 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Beginning of extension~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-let i = 1;
+// stores a short term process list
 var history = []
-
+// if a process appears in 'history' more than once it is added to this list
 var repeatoffenders = [];
+
+let i = 1;
 
 function checkProcess() {
   // This runs several times over a small span of time in order to avoid capturing spikes
+  //this may prove to be unnessicary
   setTimeout(function () {
     checkRunningProcesses()
+
     i++;
-    if (i < 10) {
+    if (i < 5) {
       checkProcess();
     }
 
@@ -100,14 +96,12 @@ function checkRunningProcesses() {
         return element.pid == stored.pid;
       };
       if (history.some(match) && (!repeatoffenders.some(match))) {
-        console.log(
-          "Caught new high usage process, send new request to print details"
-        )
+        //console.log("Caught new high usage process")
         repeatoffenders.push(element);
       }
       //check if comperitavly high usage process has a history //and check if true usage is actually that high
       if (!history.some(match)) { //&& h.cpu > .5
-        console.log("adding to history")
+        //console.log("adding to history")
         history.push(element);
       }
     });
@@ -117,18 +111,27 @@ function checkRunningProcesses() {
 
 function logHighUsageProcesses() {
   if (repeatoffenders.length > 0) {
-    console.log("These processes may be problematic: ");
-    var sorted = _.sortBy(repeatoffenders, "cpu");
+    let botMessage = `These processes may be problematic: `
+    //console.log("These processes may be problematic: ");
+    let sorted = _.sortBy(repeatoffenders, "cpu");
     repeatoffenders = sorted.reverse().splice(0, 3);
     repeatoffenders.forEach(element => {
-      slackBot.write(JSON.stringify(element));
-      console.log(element)
+      botMessage += (`"\n"` + JSON.stringify(element));
+      //console.log(element)
     });
     history
     history = _.sortBy(history, "cpu");
     history = history.reverse().splice(0, 3);
+
+    Bot.postMessageToChannel(
+      Config.slackBot.channel,
+      botMessage
+    );
   } else {
+    Bot.postMessageToChannel(
+      Config.slackBot.channel,
+      "no data, please run check again"
+    );
     checkProcess()
-    //logHighUsageProcesses()
   }
 }

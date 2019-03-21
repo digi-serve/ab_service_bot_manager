@@ -66,9 +66,9 @@ module.exports = {
     // sharedSock: {
     //   path: "/tmp/appbuilder.sock"
     // },
-    // tcp: {
-    //   port: "1338",
-    //   accessToken: "li77lePigLi77lePigLe7MeIn"
-    // }
+    tcp: {
+      port: "1338",
+      accessToken: "li77lePigLi77lePigLe7MeIn"
+    }
   }
 };
