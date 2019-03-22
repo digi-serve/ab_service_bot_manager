@@ -5,14 +5,12 @@
 const path = require("path");
 const SlackBot = require("slackbots");
 const update = require(path.join(__dirname, "command_update.js"));
-const processcheck = require(path.join(__dirname, "command_processcheck.js"));
 
 // commands
 // a hash of commands we can process:
 // update : issue a command to update the Docker Containers
 const Commands = {
-  update,
-  processcheck
+  update
 };
 
 var bot;
@@ -52,7 +50,8 @@ module.exports = {
 
     // create a bot
     bot = new SlackBot({
-      token: config.slackBot.botToken, // Add a bot https://my.slack.com/services/new/bot and put the token
+      token: config.slackBot
+        .botToken, // Add a bot https://my.slack.com/services/new/bot and put the token
       name: config.slackBot.botName
     });
 
