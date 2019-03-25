@@ -110,8 +110,8 @@ function connectHost() {
       }
       //__usageAlert: "This process " name(pid), "has been at "cpu%,mem usage reportinMB, "for " ctime,elapsed
       if (data.indexOf("__alert") > -1) {
-        var body = data.split(":");
         if (config.slackBot.enable) {
+          var body = data.split(":");
           slackBot.write(body[1]);
         }
       }
