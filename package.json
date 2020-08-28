@@ -8,7 +8,7 @@
   "dependencies": {
     "ab-utils": "Hiro-Nakamura/ab-utils",
     "express": "^4.16.4",
-    "nodemon": "^1.18.10",
+    "nodemon": "^2.0.4",
     "shelljs": "^0.8.3",
     "slackbots": "^1.2.0"
   },
