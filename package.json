@@ -6,7 +6,7 @@
   "author": "Johnny Hausman",
   "license": "MIT",
   "dependencies": {
-    "ab-utils": "Hiro-Nakamura/ab-utils",
+    "ab-utils": "github:hiro-nakamura/ab-utils",
     "express": "^4.16.4",
     "nodemon": "^2.0.4",
     "shelljs": "^0.8.3",
