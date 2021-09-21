@@ -6,11 +6,11 @@
   "author": "Johnny Hausman",
   "license": "MIT",
   "dependencies": {
+    "@slack/bolt": "^3.5.0",
     "ab-utils": "github:hiro-nakamura/ab-utils",
     "express": "^4.16.4",
     "nodemon": "^2.0.4",
-    "shelljs": "^0.8.3",
-    "slackbots": "^1.2.0"
+    "shelljs": "^0.8.3"
   },
   "scripts": {
     "dev": "node_modules/.bin/nodemon --inspect=0.0.0.0:9229 app.js",
