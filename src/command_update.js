@@ -47,16 +47,13 @@ module.exports = (bot, config, options, commandServer) => {
    if (!isUpdateInProgress) {
       isUpdateInProgress = true;
 
-      bot.postMessageToChannel(
-         config.slackBot.channel,
-         "... updating server containers"
-      );
+      Bot.write("... updating server containers");
 
       // pass our update command to the Host Process
-      commandServer.write(config.commands.update);
+      Server.write(Config.commands.update);
 
       // listen for responses from the Host
-      commandServer.on("data", done);
+      Server.on("data", done);
 
       // reset our Timer
       clearTimeout(timeoutID);
@@ -78,7 +75,7 @@ function done(data) {
 
    // listen for the Host's update when things are all back up and running.
    if (data === "__running") {
-      Bot.postMessageToChannel(Config.slackBot.channel, "... update complete.");
+      Bot.write("... update complete.");
       isUpdateInProgress = false;
       clearTimeout(timeoutID);
 
