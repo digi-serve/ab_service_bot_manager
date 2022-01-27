@@ -4,6 +4,7 @@ module.exports = {
       node: true,
       browser: true,
       es6: true,
+      mocha: true,
    },
 
    parserOptions: {
