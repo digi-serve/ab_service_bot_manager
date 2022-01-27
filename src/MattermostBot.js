@@ -38,7 +38,7 @@ class MattermostBot {
       bot.setClient(client);
       await Promise.all([bot.getTeamId(), bot.getChannelID()]);
       console.log("Mattermost Bot Online");
-      bot.write("Connected");
+      bot.write(":zap: Bot Online");
       bot.registerWebhooks();
       return bot;
    }

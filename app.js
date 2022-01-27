@@ -24,15 +24,24 @@ const MatterBot = require("./src/MattermostBot.js");
    let bot;
 
    if (config.slackBot.enable) {
+      // Fix the stack name in our commands
+      if (config.stackName && config.stackName !== "ab") {
+         for (const command in config.commands) {
+            config.commands[command] = config.commands[command].replace(
+               /ab/g,
+               config.stackName
+            );
+         }
+      }
       //setup the bot
-      console.log(`Initializint ${config.slackBot.type} Bot`);
+      console.log(`Initializing ${config.slackBot.type} Bot`);
       if (config.slackBot.type === "Slack") {
          bot = slackBot.init(config, client);
       } else if (config.slackBot.type === "Mattermost") {
          try {
             bot = await MatterBot.init(config, client);
          } catch (e) {
-            console.log("MMBOT ERROR", e);
+            console.log("Error Initializing Mattermost Bot", e);
             process.exit(1);
          }
       }
@@ -55,7 +64,7 @@ const MatterBot = require("./src/MattermostBot.js");
    var isSockConnection = true;
    var SOCKETFILE = "/tmp/ab.sock";
    var HOST = "host.docker.internal";
-   var PORT = "1339";
+   var PORT = "1338";
    var ACCESSTOKEN = "ThereIsN0Sp00n";
    var endCounter = 0;
    if (
@@ -78,13 +87,14 @@ const MatterBot = require("./src/MattermostBot.js");
       SOCKETFILE = config.hostConnection.sharedSock.path;
    } else {
       HOST = config.hostConnection.tcp.host || HOST;
-      // PORT = config.hostConnection.tcp.port;
+      PORT = config.hostConnection.tcp.port;
       ACCESSTOKEN = config.hostConnection.tcp.accessToken;
    }
 
    console.log("Connecting to Host Process.");
    var client;
    var RECONNECTING = false;
+   let sendReconnectMessage = true;
 
    function connectHost() {
       if (isSockConnection) {
@@ -102,7 +112,9 @@ const MatterBot = require("./src/MattermostBot.js");
                console.log("... sending accessToken");
                client.write(ACCESSTOKEN);
             }
+            bot.write(":electric_plug: Connected to host process.");
             bot.setClient(client);
+            sendReconnectMessage = true;
          })
          // Messages are buffers. use toString
          .on("data", function (data) {
@@ -145,8 +157,10 @@ const MatterBot = require("./src/MattermostBot.js");
                }
             }
             console.error("Server not active.");
-            if (config.slackBot.enable) {
-               bot.write("Host update server not active.");
+            if (config.slackBot.enable && sendReconnectMessage) {
+               bot.write(":warning: Host update server not active.");
+               // Only post once
+               sendReconnectMessage = false;
             }
             reconnectToHost();
          })
