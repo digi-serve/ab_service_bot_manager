@@ -1,9 +1,12 @@
 //
-// slackBot
+// slackBotBolt
 // implement our slackBot to post, listen and respond to commands on a #slack
 // channel.
+// We are using the new @slack/bolt api provided by #Slack
+//
+
 const path = require("path");
-const SlackBot = require("slackbots");
+const { App } = require("@slack/bolt");
 const update = require(path.join(__dirname, "command_update.js"));
 
 // commands
@@ -24,10 +27,12 @@ var Client = null;
 module.exports = {
    /**
     * slackBot.init()
-    * establish a connection to a #slack bot.
-    * @param conf {obj} provided config options
-    *                   (config/[bot_manager.js + local.js])
-    * @param hostClient {Socket} a connection to the Host command process
+    * establish a connection to a #slack App.
+    * @param {obj} conf
+    *        provided config options
+    *        (config/[bot_manager.js + local.js])
+    * @param {Socket} hostClient
+    *        a connection to the Host command process
     */
    init: (conf, hostClient) => {
       console.log("bot_manager: slackBot: init ...");
@@ -48,12 +53,88 @@ module.exports = {
          return;
       }
 
-      // create a bot
-      bot = new SlackBot({
-         token: config.slackBot.botToken, // Add a bot https://my.slack.com/services/new/bot and put the token
-         name: config.slackBot.botName,
+      const app = new App({
+         token: "xoxb-918363240465-2288178868452-hA90uU3RSNVwSrDDxZS8NUmS",
+         signingSecret: "34978139f7eea8d7a91498f0ada9cdba",
+         socketMode: true,
+         appToken:
+            "xapp-1-A027QJ5JKN3-2294291076244-c102cc00a7729e4a2ad13609f41b1b0835ae4b501889c65319b5280d7638035c",
+         logLevel: "debug",
       });
 
+      // Listens to incoming messages that contain "hello"
+      app.message("hey", async ({ message, say }) => {
+         // say() sends a message to the channel where the event was triggered
+         await say(`Hey there <@${message.user}>!`);
+      });
+
+      (async () => {
+         // Start your app
+         await app.start(3000);
+
+         console.log("⚡️ Bolt app is running!");
+      })();
+
+      /*
+
+      // create a bot
+      bot = new App({
+         token: config.slackBot.botToken, // Add a bot https://my.slack.com/services/new/bot and put the token
+         // name: config.slackBot.botName,
+         signingSecret: config.slackBot.signingSecret,
+         socketMode: true,
+         appToken:
+            "xapp-1-A027QJ5JKN3-2294291076244-c102cc00a7729e4a2ad13609f41b1b0835ae4b501889c65319b5280d7638035c",
+         logLevel: "debug",
+      });
+
+      // bot.event("message", async ({ ack, command, say, message }) => {
+      //    console.log("EVENT:MESSAGE:");
+      //    try {
+      //       await ack();
+      //       console.log(command);
+      //       console.log(message);
+      //       say("Got it");
+      //    } catch (e) {
+      //       console.log("Error");
+      //       console.error(e);
+      //    }
+      // });
+
+      bot.message("hey", async ({ ack, command, say }) => {
+         console.log("bot.message received:");
+         console.log(command);
+
+         try {
+            await ack();
+            say("got it!");
+         } catch (err) {
+            console.log("Error:");
+            console.error(err);
+         }
+      });
+
+      (async () => {
+         await bot.start(config.slackBot.port);
+         console.log("Slack Bolt App is running!");
+      })();
+
+
+
+
+
+*/
+
+      // bot.start(config.slackBot.port)
+      //    .then(() => {
+      //       console.log("Slack Bolt App is running!");
+      //    })
+      //    .catch((err) => {
+      //       console.error("Error starting Slack Bolt App:");
+      //       console.error(err);
+      //    });
+
+      /*
       bot.on("start", function () {
          // get the channelID of the desired channel to interact with
          bot.getChannelId(config.slackBot.channel).then((id) => {
@@ -141,6 +222,7 @@ module.exports = {
       bot.on("close", () => {
          console.log("CLOSE: slack connection closed.");
       });
+      */
    },
 
    /**
@@ -159,7 +241,9 @@ module.exports = {
     */
    write: (msg) => {
       if (bot) {
-         bot.postMessageToChannel(config.slackBot.channel, msg);
+         console.log("SlackBotBolt.write() called:");
+         console.error(msg);
+         // bot.postMessageToChannel(config.slackBot.channel, msg);
       }
    },
 };
