@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
-          path: ab_service_config
+          path: ab_service_bot_manager
       - name: Install AppBuilder
         uses: digi-serve/ab-install-action@v1
       - name: Check out kitchen-sink tests
