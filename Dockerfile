@@ -1,19 +1,23 @@
 ##
-## digiserve/ab-bot-manager:develop
+## digiserve/ab-bot-manager:[master/develop]
 ##
 ## This is our microservice for our running site to connect to a slack channel 
 ## (bot) and alert us of problems.
 ##
 ## Docker Commands:
 ## ---------------
-## $ docker build -t digiserve/ab-bot-manager:develop .
-## $ docker push digiserve/ab-bot-manager:develop
+## $ docker build -t digiserve/ab-bot-manager:[master/develop] .
+## $ docker push digiserve/ab-bot-manager:[master/develop]
 ##
 
-FROM digiserve/service-cli:develop
+ARG BRANCH=master
 
-RUN git clone --recursive https://github.com/appdevdesigns/ab_service_bot_manager.git app && cd app && git checkout develop && npm install
+FROM digiserve/service-cli:${BRANCH}
+
+COPY . /app
 
 WORKDIR /app
 
-CMD [ "node", "--inspect=0.0.0.0:9229", "app.js" ]
+RUN npm i -f
+
+CMD ["node", "--inspect=0.0.0.0:9229", "app.js"]

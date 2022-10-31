@@ -1,29 +1,34 @@
+//   ╔═╗╔═╗╦  ╦╔╗╔╔╦╗┬─┐┌─┐
+//   ║╣ ╚═╗║  ║║║║ ║ ├┬┘│
+//  o╚═╝╚═╝╩═╝╩╝╚╝ ╩ ┴└─└─┘
+// A set of basic code conventions designed to encourage quality and consistency
+// across your app's code base.  These rules are checked against automatically
+// any time you run `npm test`.
+//
+// > Note: If you're using mocha, you'll want to add an extra override file to your
+// > `test/` folder so that eslint will tolerate mocha-specific globals like `before`
+// > and `describe`.
+// Designed for ESLint v4.
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 module.exports = {
-   root: true,
    env: {
       node: true,
-      browser: true,
       es6: true,
-      mocha: true,
    },
 
    parserOptions: {
-      ecmaVersion: 8,
-      sourceType: "module",
+      ecmaVersion: 2021,
    },
+   root: true,
+   // extending recommended config and config derived from eslint-config-prettier
+   extends: ["eslint:recommended", "prettier"],
 
-   // "parser": "babel-eslint",
-   extends: ["eslint:recommended", "prettier"], // extending recommended config and config derived from eslint-config-prettier
-
-   globals: {
-      webix: "readonly",
-      $$: "readonly",
-   },
-
+   // activating eslint-plugin-prettier (--fix stuff)
    plugins: ["prettier"],
+
    rules: {
+      // customizing prettier rules (unfortunately not many of them are customizable)
       "prettier/prettier": [
-         // customizing prettier rules (unfortunately not many of them are customizable)
          "error",
          {
             arrowParens: "always",
@@ -32,7 +37,8 @@ module.exports = {
             tabWidth: 3,
          },
       ],
-      "no-console": 0, // "off",
-      // eqeqeq: ["error", "always"] // adding some custom ESLint rules
+
+      // eslint rule customization here:
+      "no-console": 0, // allow console.log() in our services
    },
 };
