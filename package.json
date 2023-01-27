@@ -6,8 +6,8 @@
   "author": "Johnny Hausman",
   "license": "MIT",
   "dependencies": {
+    "@digiserve/ab-utils": "github:digi-serve/ab-utils#master",
     "@slack/bolt": "^3.5.0",
-    "ab-utils": "github:digi-serve/ab-utils",
     "express": "^4.16.4",
     "node-fetch": "^2.6.7",
     "nodemon": "^2.0.4",
