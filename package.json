@@ -6,6 +6,7 @@
   "author": "Johnny Hausman",
   "license": "MIT",
   "dependencies": {
+    "@line/bot-sdk": "^7.5.2",
     "@slack/bolt": "^3.5.0",
     "ab-utils": "npm:@digiserve/ab-utils@^1.2.1",
     "express": "^4.16.4",

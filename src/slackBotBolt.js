@@ -6,7 +6,7 @@
 //
 
 const path = require("path");
-const { App } = require("@slack/bolt");
+const { App } = require("@line/bot-sdk").Client;
 const update = require(path.join(__dirname, "command_update.js"));
 
 // commands
