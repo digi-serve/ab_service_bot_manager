@@ -1,6 +1,10 @@
 /*
  * bot_manager
  */
+
+const AB = require("@digiserve/ab-utils");
+const env = AB.defaults.env;
+
 function parseHost(defaultValue) {
    if (process.env.BOT_HOST_SOCK_PATH) {
       return {
@@ -22,19 +26,6 @@ function parseHost(defaultValue) {
    return defaultValue;
 }
 
-function parse(envKey, defaultValue) {
-   if (typeof process.env[envKey] == "undefined") {
-      return defaultValue;
-   }
-   try {
-      return JSON.parse(process.env[envKey]);
-   } catch (e) {
-      console.log(e);
-      console.log(process.env[envKey]);
-      return process.env[envKey];
-   }
-}
-
 module.exports = {
    bot_manager: {
       /*************************************************************************/
@@ -44,8 +35,8 @@ module.exports = {
       /*   port: {integer}  The port we are listening on                       */
       /*************************************************************************/
       dockerHub: {
-         enable: parse("BOT_DOCKERHUB_ENABLE", false),
-         port: process.env.BOT_DOCKERHUB_PORT || 14000,
+         enable: env("BOT_DOCKERHUB_ENABLE", false),
+         port: env("BOT_DOCKERHUB_PORT", 14000),
       },
       /*************************************************************************/
       /* slackBot                                                              */
@@ -53,30 +44,30 @@ module.exports = {
       /*   enable: {bool}  enable our slack bot                                */
       /*************************************************************************/
       slackBot: {
-         enable: parse("BOT_SLACKBOT_ENABLE", false),
-         botToken: process.env.BOT_SLACKBOT_TOKEN || ".....",
+         enable: env("BOT_SLACKBOT_ENABLE", false),
+         botToken: env("BOT_SLACKBOT_TOKEN", "....."),
          // {string} starts with "xoxb-"
          // Open your Slack App: Settings > Install App > Bot User oAuth Token
 
-         botName: process.env.BOT_SLACKBOT_NAME || ".....",
+         botName: env("BOT_SLACKBOT_NAME", "....."),
          // {string} unique identifier for this running server.
          // This is what will be prefixed for any messages sent from this server
          // to your slack channel.  This is how you know which server you are
          // getting messages from.
 
-         channel: process.env.BOT_SLACKBOT_CHANNEL || ".....",
+         channel: env("BOT_SLACKBOT_CHANNEL", "....."),
 
-         port: process.env.BOT_SLACKBOT_PORT || ".....",
+         port: env("BOT_SLACKBOT_PORT", "....."),
          // {int} the port #slack will connect to reach our bot_manager
 
-         signingSecret: process.env.BOT_SLACKBOT_SIGNINGSECRET || ".....",
+         signingSecret: env("BOT_SLACKBOT_SIGNINGSECRET", "....."),
          // {string} Open your Slack App:
          // Basic Information > App Credentials > Signing Secret
 
-         socketMode: parse("BOT_SLACKBOT_SOCKETMODE", true),
+         socketMode: env("BOT_SLACKBOT_SOCKETMODE", true),
          // {bool} use websocket connection rather than the callback port
 
-         appToken: process.env.BOT_SLACKBOT_APPTOKEN || ".....",
+         appToken: env("BOT_SLACKBOT_APPTOKEN", "....."),
          // {string} starts with "xapp-"
          // the unique application Token.
          // Required when using socketMode:true
@@ -95,7 +86,7 @@ module.exports = {
       /*                      term is found.                                   */
       /*   options: {obj} additional options to send to the command            */
       /*************************************************************************/
-      triggers: parse("BOT_TRIGGERS", []),
+      triggers: env("BOT_TRIGGERS", []),
       // [
       //    { search: /skipdaddy\/.*:master/, command: "update", options: {} }
       // ],
@@ -106,7 +97,7 @@ module.exports = {
       /*   update:  update the running containers                              */
       /*                                                                       */
       /*************************************************************************/
-      commands: parse("BOT_COMMANDS", {
+      commands: env("BOT_COMMANDS", {
          update: "node dockerImageUpdate.js",
       }),
 
