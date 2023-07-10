@@ -6,7 +6,7 @@
   "author": "Johnny Hausman",
   "license": "MIT",
   "dependencies": {
-    "@digiserve/ab-utils": "^1.5.3",
+    "@digiserve/ab-utils": "^1.6.0",
     "@slack/bolt": "^3.5.0",
     "express": "^4.16.4",
     "node-fetch": "^2.6.7",
