@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const AB = require("ab-utils");
+const AB = require("@digiserve/ab-utils");
 
 const config = AB.config("bot_manager");
 
